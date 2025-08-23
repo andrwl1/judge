@@ -8,4 +8,8 @@ def subtract(a, b):
     """Возвращает разность a - b."""
     return a - b
 
-__all__ = ["add", "subtract"]
+def multiply(a, b):
+    """Возвращает произведение a * b."""
+    return a * b
+
+__all__ = ["add", "subtract", "multiply"]

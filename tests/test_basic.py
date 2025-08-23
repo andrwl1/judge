@@ -1,7 +1,7 @@
 import math
 import decimal
 import pytest
-from judge import add, subtract
+from judge import add, subtract, multiply
 
 # --- add ---
 @pytest.mark.parametrize("a,b,expected", [
@@ -46,3 +46,35 @@ def test_subtract_relation_with_add():
     # Свойство: a - b == add(a, -b)
     for a, b in [(7, 3), (-2, 5), (0.5, 0.25)]:
         assert subtract(a, b) == add(a, -b)
+
+# --- multiply ---
+@pytest.mark.parametrize("a,b,expected", [
+    (0, 5, 0),
+    (1, 7, 7),
+    (-3, 4, -12),
+    (-2, -8, 16),
+    (2.5, 4, 10.0),
+    (10**6, 10**6, 10**12),
+])
+def test_multiply_basic(a, b, expected):
+    assert multiply(a, b) == expected
+
+def test_multiply_commutative():
+    for a, b in [(3, 9), (-5, 7), (0.25, 0.5)]:
+        assert multiply(a, b) == multiply(b, a)
+
+def test_multiply_decimal():
+    d1 = decimal.Decimal("1.20")
+    d2 = decimal.Decimal("2.50")
+    assert multiply(d1, d2) == decimal.Decimal("3.00")
+
+def test_multiply_distributive_over_add():
+    # Распределительность: a*(b+c) == a*b + a*c
+    for a, b, c in [(3, 4, 5), (-2, 7, -1), (1.5, 0.2, 0.3)]:
+        left = multiply(a, add(b, c))
+        right = add(multiply(a, b), multiply(a, c))
+        assert left == right
+
+def test_multiply_with_nan():
+    res = multiply(float("nan"), 2.0)
+    assert math.isnan(res)
