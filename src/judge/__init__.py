@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 def add(a, b):
-    """
-    Возвращает сумму a и b.
-    Допускает int/float/Decimal и их миксы.
-    """
+    """Возвращает сумму a и b."""
     return a + b
 
-__all__ = ["add"]
+def subtract(a, b):
+    """Возвращает разность a - b."""
+    return a - b
+
+__all__ = ["add", "subtract"]
