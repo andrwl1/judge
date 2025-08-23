@@ -1,0 +1,6 @@
+line-length = 120
+target-version = "py310"
+exclude = [".venv", "build", "dist", "src/sigma"]
+
+[lint]
+select = ["E", "F"]  # базовые ошибки/ворнинги
