@@ -1,0 +1,7 @@
+pyproject.toml
+src/judge/__init__.py
+src/judge.egg-info/PKG-INFO
+src/judge.egg-info/SOURCES.txt
+src/judge.egg-info/dependency_links.txt
+src/judge.egg-info/top_level.txt
+tests/test_basic.py
