@@ -1,7 +1,8 @@
 import math
 import decimal
 import pytest
-from judge import add, subtract, multiply
+from pytest import approx
+from judge import add, subtract, multiply, divide
 
 # --- add ---
 @pytest.mark.parametrize("a,b,expected", [
@@ -43,7 +44,6 @@ def test_subtract_decimal():
     assert subtract(d1, d2) == decimal.Decimal("3.25")
 
 def test_subtract_relation_with_add():
-    # Свойство: a - b == add(a, -b)
     for a, b in [(7, 3), (-2, 5), (0.5, 0.25)]:
         assert subtract(a, b) == add(a, -b)
 
@@ -69,7 +69,6 @@ def test_multiply_decimal():
     assert multiply(d1, d2) == decimal.Decimal("3.00")
 
 def test_multiply_distributive_over_add():
-    # Распределительность: a*(b+c) == a*b + a*c
     for a, b, c in [(3, 4, 5), (-2, 7, -1), (1.5, 0.2, 0.3)]:
         left = multiply(a, add(b, c))
         right = add(multiply(a, b), multiply(a, c))
@@ -78,3 +77,31 @@ def test_multiply_distributive_over_add():
 def test_multiply_with_nan():
     res = multiply(float("nan"), 2.0)
     assert math.isnan(res)
+
+# --- divide ---
+@pytest.mark.parametrize("a,b,expected", [
+    (10, 2, 5),
+    (-9, 3, -3),
+    (2.5, 0.5, 5.0),
+    (10**12, 10**6, 10**6),
+])
+def test_divide_basic(a, b, expected):
+    out = divide(a, b)
+    # Для float используем approx
+    if isinstance(out, float):
+        assert out == approx(expected)
+    else:
+        assert out == expected
+
+def test_divide_decimal():
+    d1 = decimal.Decimal("3.30")
+    d2 = decimal.Decimal("1.10")
+    assert divide(d1, d2) == decimal.Decimal("3")
+
+def test_divide_by_zero():
+    with pytest.raises(ZeroDivisionError):
+        divide(1, 0)
+
+def test_divide_inverse_of_multiply():
+    for a, b in [(7, 3), (-2, 5), (0.5, 0.25)]:
+        assert divide(multiply(a, b), b) == approx(a)
